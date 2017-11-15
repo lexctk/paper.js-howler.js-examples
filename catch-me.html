@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Catch Me</title>
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<!-- Font Awesome CSS -->	
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">	
+	
+	<!-- Custom CSS -->	
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+	<canvas id="myCanvas" resize></canvas>
+	
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!-- Howler -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.5/howler.min.js"></script>
+
+	<!-- Paper.js v0.11.5 -->
+	<script type="text/javascript" src="js/paper-full.min.js"></script>
+	
+	<!-- Define PaperScript -->
+	<script type="text/paperscript" canvas="myCanvas">
+		var text = new PointText({
+			point: view.center,
+			justification: 'center',
+			fontSize: 30,
+			fillColor: 'white',
+			opacity: 1
+		});	
+		text.content = "Hi!";
+		
+		var gameStart = false;
+		
+		var destination = Point.random() * view.size;
+		var runText = false;
+		
+		var mousePosition;
+		
+		function onMouseMove(event) {
+			if (!gameStart) return;
+			
+			mousePosition = event.point;
+			
+			var delta = text.position.getDistance(mousePosition);
+			
+			if (delta < 160) {
+				runText = true;
+				destination = Point.random() * view.size;
+				text.content = "OMG!";
+			}
+		}
+		
+		function onFrame() {
+			if (!gameStart) {
+				console.log(text.opacity);
+				text.opacity -= 0.02;
+				if (text.opacity <= 0) {
+					gameStart = true;
+					text.content = "Catch me if you can :)";
+				}
+				return;
+			}
+			
+			if (runText) {
+				var vector = destination - text.position;
+				text.position += vector / 30;
+				if (vector.length < 5) {
+					runText = false;
+					text.content = "Catch me if you can :)";
+				}
+			}			
+			var delta = text.position.getDistance(mousePosition);
+			if (delta > 300) {
+					runText = false;
+					text.content = "Catch me if you can :)";				
+			}
+		}
+	</script>
+</body>
+</html>

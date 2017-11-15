@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Tap Play</title>
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<!-- Custom CSS -->	
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+	<canvas id="myCanvas" resize></canvas>
+	
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!-- Howler -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.5/howler.min.js"></script>
+
+	<!-- Paper.js v0.11.5 -->
+	<script type="text/javascript" src="js/paper-full.min.js"></script>
+	
+	<!-- Define PaperScript -->
+	<script type="text/paperscript" canvas="myCanvas">
+		var keyAssignment = {
+			a: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/bubbles.mp3']})
+			},
+			b: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/clay.mp3']})
+			},	
+			c: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/confetti.mp3']})
+			},	
+			d: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/corona.mp3']})
+			},
+			e: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/dotted-spiral.mp3']})
+			},
+			f: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/flash-1.mp3']})
+			},		
+			g: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/flash-2.mp3']})
+			},			
+			h: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/flash-3.mp3']})
+			},
+			i: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/glimmer.mp3']})
+			},
+			j: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/moon.mp3']})
+			},		
+			k: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/pinwheel.mp3']})
+			},		
+			l: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/piston-1.mp3']})
+			},
+			m: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/piston-2.mp3']})
+			},
+			n: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/piston-3.mp3']})
+			},			
+			o: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/prism-1.mp3']})
+			},		
+			p: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/prism-2.mp3']})
+			},
+			q: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/prism-3.mp3']})
+			},
+			r: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/splits.mp3']})
+			},			
+			s: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/squiggle.mp3']})
+			},			
+			t: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/strike.mp3']})
+			},
+			u: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/suspension.mp3']})
+			},
+			v: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/timer.mp3']})
+			},			
+			w: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/ufo.mp3']})
+			},		
+			x: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/veil.mp3']})
+			},
+			y: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/wipe.mp3']})
+			},
+			z: {
+				color: getRandomRgb(),
+				sound: new Howl({ src: ['sounds/zig-zag.mp3']})
+			}		
+		}
+		
+		//generate random RGB color
+		function getRandomRgb() {
+			var num = Math.round(0xffffff * Math.random());
+			var r = num >> 16;
+			var g = num >> 8 & 255;
+			var b = num & 255;
+			return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+		}	
+		
+		var path = [];
+	
+		function onKeyDown(event) {
+			if (!keyAssignment[event.key]) return;
+			path.push ( new Path.Circle({
+				center: new Point(view.size.width, view.size.height) * Point.random(),
+				radius: (300 * Math.random()) + 50,
+				fillColor: keyAssignment[event.key].color
+			}));
+			keyAssignment[event.key].sound.play();
+		}
+		
+		function onFrame() {
+			for (var i = 0; i<path.length; i++) {
+				path[i].fillColor.hue +=1;
+				path[i].scale(0.9);
+				if (path[i].area < 1) {
+					path[i].remove();
+					path.splice(i, 1);
+					i--;
+				}
+			}
+		}
+	</script>
+</body>
+</html>
